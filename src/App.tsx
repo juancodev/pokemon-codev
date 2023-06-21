@@ -1,10 +1,11 @@
 import { Layout } from "./layout/Layout";
+import { Login } from "./components/login/Login";
 
 function App() {
   return (
     <>
       <Layout>
-        <h1>Test</h1>
+        <Login />
       </Layout>
     </>
   );
