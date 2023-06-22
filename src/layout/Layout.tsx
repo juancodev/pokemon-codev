@@ -9,29 +9,31 @@ type childrenComponent = {
 const Layout = ({ children }: childrenComponent): JSX.Element => {
   return (
     <>
-      <div className="max-w-full max-h-full full-screen:max-h-full max-sm:px-9 max-sm:py-14 py-20 px-24 bg-[#5F636785]">
-        <div className="max-h-full grid lg:grid-cols-2 max-sm:grid-cols-1 max-sm:grid-rows-1 bg-[#088BED] rounded-3xl">
+      <div className="full-screen:max-h-full max-h-full max-w-full bg-amber-400 px-24 py-20 max-sm:px-9 max-sm:py-14">
+        <div className="grid max-h-full rounded-3xl bg-[#088BED] max-sm:grid-cols-1 max-sm:grid-rows-1 lg:grid-cols-2">
           <div className="container-logo">
             <div className="max-md:hidden">
-              <img className="pt-8 pl-7 mr-0 w-1/2" src={logo} />
+              <img className="mr-0 w-1/2 pl-7 pt-8" src={logo} />
             </div>
-            <div className="text-center uppercase mt-7 max-md:text-start max-md:ml-5 max-md:mb-5">
-              <h3 className="text-2xl max-md:text-sm font-bold text-white">
+            <div className="mt-7 text-center uppercase max-md:mb-5 max-md:ml-5 max-md:text-start">
+              <h3 className="text-2xl font-bold text-white max-md:text-sm">
                 Welcome to{" "}
                 <span className="text-yellow-400">Pokemon-Codev</span>
               </h3>
             </div>
-            <div className="flex flex-col items-center">{children}</div>
+            <div className="flex h-3/5 flex-col items-center justify-center">
+              {children}
+            </div>
           </div>
-          <div className="container-img max-sm:w-full max-sm:h-full md:w-full">
+          <div className="max-sm:h-full max-sm:w-full md:w-full">
             <img
               src={frontPageImage}
               alt="Image"
-              className="max-sm:h-full max-sm:w-full max-sm:object-cover md:w-full xl:w-full full-screen:w-full"
+              className="full-screen:w-full max-sm:h-full max-sm:w-full max-sm:object-cover md:w-full xl:w-full"
             />
           </div>
         </div>
-        <p className="absolute max-lg:hidden lg:hidden xl:block full-screen:hidden bottom-[10%] right-[52%] left-[25%] font-light text-base text-white">
+        <p className="full-screen:hidden absolute bottom-[10%] left-[25%] right-[52%] text-base font-light text-white max-lg:hidden lg:hidden xl:block">
           Terms & conditions
         </p>
       </div>
