@@ -2,10 +2,6 @@ import React from "react";
 import frontPageImage from "../assets/pokemon2.jpg";
 import logo from "../assets/logo-monoma.png";
 
-type childrenComponent = {
-  children: JSX.Element[] | JSX.Element;
-};
-
 const Layout = ({ children }: childrenComponent): JSX.Element => {
   return (
     <>
@@ -22,7 +18,7 @@ const Layout = ({ children }: childrenComponent): JSX.Element => {
               </h3>
             </div>
             <div className="flex h-3/5 flex-col items-center justify-center">
-              {children}
+              <>{children}</>
             </div>
           </div>
           <div className="max-sm:h-full max-sm:w-full md:w-full">
