@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 type Users = {
   user: object | string[] | string;
@@ -10,9 +11,16 @@ type Users = {
   logout: () => void;
 };
 
-const AuthContext = React.createContext({});
+const AuthContext = React.createContext<Users>({
+  user: {},
+  login: (data) => {
+    data?.email, data?.password, data?.token;
+  },
+  logout: () => undefined,
+});
 
 const AuthProvider = ({ children }: childrenComponent): JSX.Element => {
+  const navigate = useNavigate();
   const [user, setUser] = React.useState({
     email: "",
     password: "",
@@ -20,12 +28,15 @@ const AuthProvider = ({ children }: childrenComponent): JSX.Element => {
   });
 
   const login = (userInformation = user) => {
-    return setUser({
-      ...user,
-      email: userInformation.email,
-      password: userInformation.password,
-      token: userInformation.token,
-    });
+    return [
+      setUser({
+        ...user,
+        email: userInformation.email,
+        password: userInformation.password,
+        token: userInformation.token,
+      }),
+      navigate("/"),
+    ];
   };
 
   const logout = () => {
@@ -38,7 +49,13 @@ const AuthProvider = ({ children }: childrenComponent): JSX.Element => {
   };
 
   const auth: Users = { user, login, logout };
+
   return <AuthContext.Provider value={auth}>{children}</AuthContext.Provider>;
 };
 
-export default AuthProvider;
+const useAuth = () => {
+  const auth = React.useContext(AuthContext);
+  return auth;
+};
+
+export { AuthContext, AuthProvider, useAuth };

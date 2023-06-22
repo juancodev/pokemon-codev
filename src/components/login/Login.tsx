@@ -1,5 +1,6 @@
 import { useState, FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../auth/AuthContext";
 import { Button } from "../button/Button";
 
 type FormValues = {
@@ -17,10 +18,16 @@ const Login = (): JSX.Element => {
     token: "",
   });
 
+  const userAuth = useAuth();
+
+  userAuth.login({ email: "", password: "", token: "" });
+
   const handleSubmit = (event: FormElement) => {
     event.preventDefault();
+
     console.log(JSON.stringify(formValue));
   };
+
   return (
     <>
       <div className="mt-2.5 h-[70%] w-3/5 rounded bg-slate-50 p-3 max-sm:w-full max-sm:px-5">
