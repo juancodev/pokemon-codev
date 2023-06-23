@@ -1,11 +1,15 @@
-import React from "react";
 import { useAuth } from "./AuthContext";
+import { Navigate } from "react-router-dom";
 
 const AuthRouter = ({ children }: childrenComponent) => {
   const userAuth = useAuth();
 
-  console.log(userAuth);
-  return <div>AuthRouter</div>;
+  if (!userAuth.user.isAuthenticated) {
+    console.log(userAuth);
+    return <Navigate to="/login" replace={true} />;
+  }
+
+  return <>{children}</>;
 };
 
 export { AuthRouter };

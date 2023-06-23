@@ -2,19 +2,30 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 
 type Users = {
-  user: object | string[] | string;
+  user: {
+    email: string;
+    password: string;
+    token: string;
+    isAuthenticated: boolean;
+  };
   login: (userInformation: {
     email: string;
     password: string;
     token: string;
+    isAuthenticated: boolean;
   }) => void;
   logout: () => void;
 };
 
 const AuthContext = React.createContext<Users>({
-  user: {},
+  user: {
+    email: "",
+    password: "",
+    token: "",
+    isAuthenticated: false,
+  },
   login: (data) => {
-    data?.email, data?.password, data?.token;
+    data?.email, data?.password, data?.token, data?.isAuthenticated;
   },
   logout: () => undefined,
 });
@@ -25,6 +36,7 @@ const AuthProvider = ({ children }: childrenComponent): JSX.Element => {
     email: "",
     password: "",
     token: "",
+    isAuthenticated: false,
   });
 
   const login = (userInformation = user) => {
@@ -34,6 +46,7 @@ const AuthProvider = ({ children }: childrenComponent): JSX.Element => {
         email: userInformation.email,
         password: userInformation.password,
         token: userInformation.token,
+        isAuthenticated: userInformation.isAuthenticated,
       }),
       navigate("/"),
     ];

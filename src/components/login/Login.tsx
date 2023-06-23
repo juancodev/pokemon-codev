@@ -20,11 +20,14 @@ const Login = (): JSX.Element => {
 
   const userAuth = useAuth();
 
-  userAuth.login({ email: "", password: "", token: "" });
-
   const handleSubmit = (event: FormElement) => {
     event.preventDefault();
-
+    userAuth.login({
+      email: formValue.email,
+      password: formValue.password,
+      token: "",
+      isAuthenticated: true,
+    });
     console.log(JSON.stringify(formValue));
   };
 
