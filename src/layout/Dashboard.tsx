@@ -1,31 +1,46 @@
 import { useState, useEffect } from "react";
-import {
-  Card,
-  CardHeader,
-  CardBody,
-  CardFooter,
-  Text,
-  Heading,
-  Stack,
-} from "@chakra-ui/react";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import CardMedia from "@mui/material/CardMedia";
+import Typography from "@mui/material/Typography";
+import { Button, CardActionArea, CardActions } from "@mui/material";
 import Pokemon from "../interface/Pokemon";
-const API = import.meta.env.VITE_APP_API;
-const VERSION = import.meta.env.VITE_APP_VERSION;
+
+// const API = import.meta.env.VITE_APP_API;
+// const VERSION = import.meta.env.VITE_APP_VERSION;
 
 const Dashboard = () => {
   const [pokemon, setPokemon] = useState<Array<Pokemon>>([]);
 
-  const getPokemon = async (API: string, VERSION: string) => {
-    const getData = await fetch(`${API}/${VERSION}/pokemon?limit=100&offset=0`);
+  const getPokemon = async () => {
+    // const getData = await fetch(`${API}/${VERSION}/pokemon?limit=100&offset=0`);
+    const getData = await fetch(
+      `https://pokeapi.co/api/v2/pokemon?limit=100&offset=0`
+    );
     const response = await getData.json();
-    return response.results;
+    return response;
+  };
+
+  const getPokemonDetails = async (pokeDetail: string) => {
+    const response = await fetch(`${pokeDetail}`);
+    const data = await response.json();
+    return data;
   };
 
   useEffect(() => {
     try {
-      getPokemon(API, VERSION).then((data) => {
-        setPokemon(data);
-      });
+      getPokemon()
+        .then((response) => response)
+        .then((data) => {
+          const pokemonOnlyDetail = data.results.map(
+            (pokemonData: PokemonResult) => {
+              return getPokemonDetails(pokemonData.url).then(
+                (response) => response
+              );
+            }
+          );
+          Promise.all(pokemonOnlyDetail).then((poke) => setPokemon(poke));
+        });
     } catch (error) {
       console.log(error);
     }
@@ -44,20 +59,38 @@ const Dashboard = () => {
               placeholder="Search Pokemon..."
             />
           </div>
-          <div className="card-list-pokemon grid grid-cols-5 grid-rows-5">
+          <div className="grid grid-cols-5 grid-rows-5 gap-2">
             {pokemon.map(
-              (pokeItem: Pokemon): JSX.Element => (
+              (pokeItem: Pokemon, index: number): JSX.Element => (
                 <>
-                  {/* <div className="h-32 w-32 border">
-                    <div>{pokeItem.name}</div>
-                  </div> */}
-                  <Card maxW="md" borderWidth="10px">
-                    <CardBody>
-                      <Stack mt="6" spacing="3">
-                        <Heading size="lg">{pokeItem.name}</Heading>
-                        <Text>1</Text>
-                      </Stack>
-                    </CardBody>
+                  <Card sx={{ maxWidth: 345 }}>
+                    <CardActionArea>
+                      <CardMedia
+                        component="img"
+                        height="140"
+                        image={pokeItem.sprites?.front_default}
+                        alt={pokeItem.name}
+                      />
+                      <CardContent>
+                        <Typography gutterBottom variant="h5" component="div">
+                          {pokeItem.name}
+                        </Typography>
+                        <Typography variant="body2" color="text.secondary">
+                          Height: {pokeItem.height}
+                        </Typography>
+                        <Typography variant="body2" color="text.secondary">
+                          Weight: {pokeItem.weight}
+                        </Typography>
+                        <Typography variant="body2" color="text.secondary">
+                          Moves: {pokeItem.moves[index]?.move.name}
+                        </Typography>
+                      </CardContent>
+                    </CardActionArea>
+                    <CardActions>
+                      <Button size="small" color="primary">
+                        Share
+                      </Button>
+                    </CardActions>
                   </Card>
                 </>
               )

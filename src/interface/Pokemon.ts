@@ -2,6 +2,7 @@ interface Pokemon {
   name?: string | undefined;
   abilities?: Array<Ability> | undefined;
   forms?: Array<Forms> | undefined;
+  moves?: Array<Moves> | undefined | [];
   height?: number | undefined;
   id?: number | undefined;
   locationAreaEncounters?: string | undefined;
@@ -23,10 +24,16 @@ interface Forms {
   url?: string | undefined;
 }
 
+interface Moves {
+  move: {
+    name: string;
+  }
+}
+
 interface Sprites {
-  frontDefault: string | undefined;
-  backDefault?: string | undefined;
-  frontShiny?: string | undefined;
+  front_default: string | undefined;
+  back_default?: string | undefined;
+  front_shiny?: string | undefined;
 }
 
 interface Species {
