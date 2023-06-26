@@ -1,4 +1,5 @@
 import { Routes, Route } from "react-router-dom";
+import { ChakraProvider } from "@chakra-ui/react";
 import { Layout } from "./layout/Layout";
 import { Login } from "./components/login/Login";
 import { Dashboard } from "./layout/Dashboard";
@@ -15,7 +16,9 @@ function App() {
               path="/"
               element={
                 <AuthRouter>
-                  <Dashboard />
+                  <ChakraProvider>
+                    <Dashboard />
+                  </ChakraProvider>
                 </AuthRouter>
               }
             />
