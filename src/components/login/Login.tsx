@@ -1,5 +1,5 @@
 import { useState, FormEvent, useRef, MutableRefObject } from "react";
-import type { HTMLInputElement } from "@types/react";
+// import type { HTMLInputElement } from "@types/react";
 import { useAuth } from "../../auth/AuthContext";
 import { Button } from "../button/Button";
 

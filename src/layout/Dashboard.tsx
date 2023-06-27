@@ -87,28 +87,18 @@ const Dashboard = () => {
                       <CardActionArea>
                         <CardMedia
                           component="img"
-                          height="140"
+                          height="150"
                           image={pokeItem.sprites?.front_default}
                           alt={pokeItem.name}
+                          className="mb-1.5"
                         />
+                        <button className="mx-9 rounded-3xl bg-lime-500 p-1.5">
+                          <span className="font-semibold text-white">
+                            WEIGHT:
+                          </span>{" "}
+                          {pokeItem.weight}
+                        </button>
                         <CardContent>
-                          <Typography gutterBottom variant="h5" component="div">
-                            {pokeItem.name}
-                          </Typography>
-                          <Typography
-                            variant="body2"
-                            className="text-slate-500"
-                          >
-                            <span className="text-gray-900">Height:</span>{" "}
-                            {pokeItem.height}
-                          </Typography>
-                          <Typography
-                            variant="body2"
-                            className="text-slate-500"
-                          >
-                            <span className="text-gray-900">Weight:</span>{" "}
-                            {pokeItem.weight}
-                          </Typography>
                           {pokeItem.moves?.map((poke, index) => {
                             if (index < 2) {
                               return (
