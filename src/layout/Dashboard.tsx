@@ -3,7 +3,7 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
-import { Button, CardActionArea, CardActions } from "@mui/material";
+import { CardActionArea } from "@mui/material";
 import Pokemon from "../interface/Pokemon";
 
 // const API = import.meta.env.VITE_APP_API;
@@ -11,6 +11,7 @@ import Pokemon from "../interface/Pokemon";
 
 const Dashboard = () => {
   const [pokemon, setPokemon] = useState<Array<Pokemon>>([]);
+  const [loading, setLoading] = useState<boolean>(true);
 
   const getPokemon = async () => {
     // const getData = await fetch(`${API}/${VERSION}/pokemon?limit=100&offset=0`);
@@ -39,7 +40,10 @@ const Dashboard = () => {
               );
             }
           );
-          Promise.all(pokemonOnlyDetail).then((poke) => setPokemon(poke));
+          Promise.all(pokemonOnlyDetail).then((poke) => {
+            setLoading(false);
+            setPokemon(poke);
+          });
         });
     } catch (error) {
       console.log(error);
@@ -59,43 +63,75 @@ const Dashboard = () => {
               placeholder="Search Pokemon..."
             />
           </div>
-          <div className="grid grid-cols-5 grid-rows-5 gap-2">
-            {pokemon.map(
-              (pokeItem: Pokemon, index: number): JSX.Element => (
-                <>
-                  <Card sx={{ maxWidth: 345 }}>
-                    <CardActionArea>
-                      <CardMedia
-                        component="img"
-                        height="140"
-                        image={pokeItem.sprites?.front_default}
-                        alt={pokeItem.name}
-                      />
-                      <CardContent>
-                        <Typography gutterBottom variant="h5" component="div">
-                          {pokeItem.name}
-                        </Typography>
-                        <Typography variant="body2" color="text.secondary">
-                          Height: {pokeItem.height}
-                        </Typography>
-                        <Typography variant="body2" color="text.secondary">
-                          Weight: {pokeItem.weight}
-                        </Typography>
-                        <Typography variant="body2" color="text.secondary">
-                          Moves: {pokeItem.moves[index]?.move.name}
-                        </Typography>
-                      </CardContent>
-                    </CardActionArea>
-                    <CardActions>
-                      <Button size="small" color="primary">
-                        Share
-                      </Button>
-                    </CardActions>
-                  </Card>
-                </>
-              )
-            )}
-          </div>
+          {loading ? (
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              className="h-10 w-10 animate-spin"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99"
+              />
+            </svg>
+          ) : (
+            <div className="grid grid-cols-5 grid-rows-5 gap-3">
+              {pokemon.map(
+                (pokeItem: Pokemon, index): JSX.Element => (
+                  <>
+                    <Card key={index} sx={{ maxWidth: 345 }}>
+                      <CardActionArea>
+                        <CardMedia
+                          component="img"
+                          height="140"
+                          image={pokeItem.sprites?.front_default}
+                          alt={pokeItem.name}
+                        />
+                        <CardContent>
+                          <Typography gutterBottom variant="h5" component="div">
+                            {pokeItem.name}
+                          </Typography>
+                          <Typography
+                            variant="body2"
+                            className="text-slate-500"
+                          >
+                            <span className="text-gray-900">Height:</span>{" "}
+                            {pokeItem.height}
+                          </Typography>
+                          <Typography
+                            variant="body2"
+                            className="text-slate-500"
+                          >
+                            <span className="text-gray-900">Weight:</span>{" "}
+                            {pokeItem.weight}
+                          </Typography>
+                          {pokeItem.moves?.map((poke, index) => {
+                            if (index < 2) {
+                              return (
+                                <Typography
+                                  key={index}
+                                  variant="body2"
+                                  className="text-slate-500"
+                                >
+                                  <span className="text-gray-900">Moves:</span>{" "}
+                                  {poke.move.name}
+                                </Typography>
+                              );
+                            }
+                            return null;
+                          })}
+                        </CardContent>
+                      </CardActionArea>
+                    </Card>
+                  </>
+                )
+              )}
+            </div>
+          )}
         </div>
       </div>
     </>

@@ -1,5 +1,5 @@
-import { useState, FormEvent } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, FormEvent, useRef, MutableRefObject } from "react";
+import type { HTMLInputElement } from "@types/react";
 import { useAuth } from "../../auth/AuthContext";
 import { Button } from "../button/Button";
 
@@ -11,6 +11,8 @@ type FormValues = {
 
 type FormElement = FormEvent<HTMLFormElement>;
 
+// type InputPassword = InputHTMLAttributes<HTMLInputElement>;
+
 const Login = (): JSX.Element => {
   const [formValue, setFormValue] = useState<FormValues>({
     email: "",
@@ -18,7 +20,16 @@ const Login = (): JSX.Element => {
     token: "",
   });
 
+  const inputPassword: MutableRefObject<HTMLInputElement> = useRef();
   const userAuth = useAuth();
+
+  const lookPassword = () => {
+    if (inputPassword.current?.type == "password") {
+      inputPassword.current.type = "text";
+    } else {
+      inputPassword.current.type = "password";
+    }
+  };
 
   const handleSubmit = (event: FormElement) => {
     event.preventDefault();
@@ -41,7 +52,7 @@ const Login = (): JSX.Element => {
           <input
             type="email"
             placeholder="Email"
-            className="form-email mb-5 w-full rounded-md"
+            className="mb-5 w-full rounded-md"
             required
             onChange={(e) =>
               setFormValue({
@@ -53,15 +64,15 @@ const Login = (): JSX.Element => {
           <input
             type="password"
             placeholder="Password"
-            className="form-password mb-5 w-full rounded-md"
+            className="mb-5 w-full rounded-md"
             required
             onChange={(e) =>
               setFormValue({
                 ...formValue,
                 password: e.target.value,
-                // isAuthenticated: true,
               })
             }
+            ref={inputPassword}
           />
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -69,7 +80,8 @@ const Login = (): JSX.Element => {
             viewBox="0 0 24 24"
             strokeWidth={1.5}
             stroke="currentColor"
-            className="absolute right-[5%] top-[35%] h-6 w-6"
+            className="absolute right-[5%] top-[35%] h-6 w-6 cursor-pointer"
+            onClick={lookPassword}
           >
             <path
               strokeLinecap="round"
