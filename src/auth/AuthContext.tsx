@@ -6,13 +6,11 @@ type Users = {
     email: string;
     password: string;
     token: string;
-    isAuthenticated: boolean;
   };
   login: (userInformation: {
     email: string;
     password: string;
     token: string;
-    isAuthenticated: boolean;
   }) => void;
   logout: () => void;
 };
@@ -22,10 +20,9 @@ const AuthContext = React.createContext<Users>({
     email: "",
     password: "",
     token: "",
-    isAuthenticated: false,
   },
   login: (data) => {
-    data?.email, data?.password, data?.token, data?.isAuthenticated;
+    data?.email, data?.password, data?.token;
   },
   logout: () => undefined,
 });
@@ -36,7 +33,6 @@ const AuthProvider = ({ children }: childrenComponent): JSX.Element => {
     email: "",
     password: "",
     token: "",
-    isAuthenticated: false,
   });
 
   const login = (userInformation = user) => {
@@ -46,7 +42,6 @@ const AuthProvider = ({ children }: childrenComponent): JSX.Element => {
         email: userInformation.email,
         password: userInformation.password,
         token: userInformation.token,
-        isAuthenticated: userInformation.isAuthenticated,
       }),
       navigate("/"),
     ];

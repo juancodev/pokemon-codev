@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, ChangeEvent } from "react";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
@@ -12,6 +12,7 @@ import Pokemon from "../interface/Pokemon";
 const Dashboard = () => {
   const [pokemon, setPokemon] = useState<Array<Pokemon>>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const [searchPokemon, setSearchPokemon] = useState<string>("");
 
   const getPokemon = async () => {
     // const getData = await fetch(`${API}/${VERSION}/pokemon?limit=100&offset=0`);
@@ -48,7 +49,17 @@ const Dashboard = () => {
     } catch (error) {
       console.log(error);
     }
-  }, [pokemon]);
+  }, []);
+
+  const filterPokemon = ({ target }: ChangeEvent<HTMLInputElement>) => {
+    setSearchPokemon(target.value);
+    const findPokemon = pokemon.filter((poke) =>
+      poke.name?.includes(searchPokemon)
+    );
+    return setPokemon(findPokemon);
+  };
+
+  // console.log(findPokemon);
 
   return (
     <>
@@ -61,6 +72,8 @@ const Dashboard = () => {
               id=""
               className="form-input"
               placeholder="Search Pokemon..."
+              value={searchPokemon}
+              onChange={filterPokemon}
             />
           </div>
           {loading ? (
@@ -92,6 +105,9 @@ const Dashboard = () => {
                           alt={pokeItem.name}
                           className="mb-1.5"
                         />
+                        <Typography variant="body2" className="text-slate-500">
+                          {pokeItem.name}
+                        </Typography>
                         <button className="mx-9 rounded-3xl bg-lime-500 p-1.5">
                           <span className="font-semibold text-white">
                             WEIGHT:

@@ -8,7 +8,7 @@ import { Header } from "../components/header/Header";
 const Layout = ({ children }: childrenComponent): JSX.Element => {
   const userAuth = useAuth();
 
-  if (userAuth.user?.isAuthenticated) {
+  if (userAuth.user?.token) {
     return (
       <>
         <Header>

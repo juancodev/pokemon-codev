@@ -1,5 +1,4 @@
-import { useState, FormEvent, useRef, MutableRefObject } from "react";
-// import type { HTMLInputElement } from "@types/react";
+import { useState, FormEvent, useRef } from "react";
 import { useAuth } from "../../auth/AuthContext";
 import { Button } from "../button/Button";
 
@@ -11,23 +10,29 @@ type FormValues = {
 
 type FormElement = FormEvent<HTMLFormElement>;
 
-// type InputPassword = InputHTMLAttributes<HTMLInputElement>;
-
 const Login = (): JSX.Element => {
+  const userAuth = useAuth();
+
   const [formValue, setFormValue] = useState<FormValues>({
     email: "",
     password: "",
     token: "",
   });
 
-  const inputPassword: MutableRefObject<HTMLInputElement> = useRef();
-  const userAuth = useAuth();
+  const [token, setToken] = useState<string>(
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Imptb250aWxsYUBnbWFpbC5jb20iLCJwYXNzd29yZCI6InBhc3N3b3JkIn0.D3uHrypFBzkj3dcJuqNGXRGCXgRnO1lzpkRQuCdodwQ"
+  );
+  const inputPassword = useRef<HTMLInputElement>(null);
+
+  localStorage.setItem("token", token);
 
   const lookPassword = () => {
     if (inputPassword.current?.type == "password") {
       inputPassword.current.type = "text";
     } else {
-      inputPassword.current.type = "password";
+      if (inputPassword.current) {
+        inputPassword.current.type = "password";
+      }
     }
   };
 
@@ -36,10 +41,9 @@ const Login = (): JSX.Element => {
     userAuth.login({
       email: formValue.email,
       password: formValue.password,
-      token: "",
-      isAuthenticated: true,
+      token: token,
     });
-    console.log(JSON.stringify(formValue));
+    console.log(formValue);
   };
 
   return (
