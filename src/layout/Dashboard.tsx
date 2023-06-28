@@ -56,7 +56,9 @@ const Dashboard = () => {
     const findPokemon = pokemon.filter((poke) =>
       poke.name?.includes(searchPokemon)
     );
-    return setPokemon(findPokemon);
+
+    console.log(findPokemon);
+    // return setPokemon(findPokemon);
   };
 
   // console.log(findPokemon);
@@ -105,7 +107,12 @@ const Dashboard = () => {
                           alt={pokeItem.name}
                           className="mb-1.5"
                         />
-                        <Typography variant="body2" className="text-slate-500">
+                        <Typography
+                          gutterBottom
+                          variant="h5"
+                          component="div"
+                          className="text-center text-slate-500"
+                        >
                           {pokeItem.name}
                         </Typography>
                         <button className="mx-9 rounded-3xl bg-lime-500 p-1.5">

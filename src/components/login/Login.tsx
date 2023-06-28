@@ -13,15 +13,16 @@ type FormElement = FormEvent<HTMLFormElement>;
 const Login = (): JSX.Element => {
   const userAuth = useAuth();
 
-  const [formValue, setFormValue] = useState<FormValues>({
-    email: "",
-    password: "",
-    token: "",
-  });
-
   const [token, setToken] = useState<string>(
     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Imptb250aWxsYUBnbWFpbC5jb20iLCJwYXNzd29yZCI6InBhc3N3b3JkIn0.D3uHrypFBzkj3dcJuqNGXRGCXgRnO1lzpkRQuCdodwQ"
   );
+
+  const [formValue, setFormValue] = useState<FormValues>({
+    email: "",
+    password: "",
+    token: token,
+  });
+
   const inputPassword = useRef<HTMLInputElement>(null);
 
   localStorage.setItem("token", token);
