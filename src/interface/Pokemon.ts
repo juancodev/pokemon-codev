@@ -9,6 +9,7 @@ interface Pokemon {
   species?: Species;
   sprites?: Sprites | undefined;
   stats?: Array<object> | undefined;
+  types?: Array<Types> | undefined;
   weight?: number | undefined;
 }
 
@@ -48,5 +49,12 @@ interface Species {
     name: string
   }
 }
+
+interface Types {
+  type: {
+    name: string;
+  }
+}
+
 
 export default Pokemon

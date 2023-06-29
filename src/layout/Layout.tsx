@@ -1,4 +1,3 @@
-import React from "react";
 import frontPageImage from "../assets/pokemon2.jpg";
 import logo from "../assets/logo-monoma.png";
 import { useAuth } from "../auth/AuthContext";

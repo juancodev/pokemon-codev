@@ -44,7 +44,6 @@ const Login = (): JSX.Element => {
       password: formValue.password,
       token: token,
     });
-    console.log(formValue);
   };
 
   return (
