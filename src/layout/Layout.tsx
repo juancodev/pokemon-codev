@@ -18,7 +18,7 @@ const Layout = ({ children }: childrenComponent): JSX.Element => {
   } else {
     return (
       <>
-        <div className="full-screen:max-h-full max-h-full max-w-full bg-amber-400 px-24 py-20 max-sm:px-9 max-sm:py-14">
+        <div className="max-h-full max-w-full bg-amber-400 px-24 py-20 max-sm:px-9 max-sm:py-14 full-screen:max-h-full">
           <div className="grid max-h-full rounded-3xl bg-[#088BED] max-sm:grid-cols-1 max-sm:grid-rows-1 lg:grid-cols-2">
             <div className="container-logo">
               <div className="max-md:hidden">
@@ -30,7 +30,7 @@ const Layout = ({ children }: childrenComponent): JSX.Element => {
                   <span className="text-yellow-400">Pokemon-Codev</span>
                 </h3>
               </div>
-              <div className="flex h-3/5 flex-col items-center justify-center">
+              <div className="flex h-3/4 flex-col items-center justify-center">
                 <>{children}</>
               </div>
             </div>

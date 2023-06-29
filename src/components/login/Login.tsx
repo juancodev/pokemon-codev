@@ -48,7 +48,7 @@ const Login = (): JSX.Element => {
 
   return (
     <>
-      <div className="mt-2.5 h-[70%] w-3/5 rounded bg-slate-50 p-3 max-sm:w-full max-sm:px-5">
+      <div className="mt-2.5 h-full w-3/5 rounded bg-slate-50 p-3 max-sm:w-full max-sm:px-5">
         <h2 className="mb-7 text-5xl font-medium text-[#088BED] max-sm:text-2xl">
           Login
         </h2>
