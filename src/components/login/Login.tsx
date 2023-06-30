@@ -38,6 +38,9 @@ const Login = (): JSX.Element => {
   };
 
   const handleSubmit = (event: FormElement) => {
+    if (formValue.password.length === 0) {
+      setToken("");
+    }
     event.preventDefault();
     userAuth.login({
       email: formValue.email,
