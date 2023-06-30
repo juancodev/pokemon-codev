@@ -14,10 +14,12 @@ interface Pokemon {
 }
 
 interface Ability {
-  name: string | undefined | unknown;
-  url?: string | undefined | unknown;
-  is_hide?: boolean | undefined;
-  slot?: number | undefined;
+  ability: {
+    name: string | undefined | unknown;
+    url?: string | undefined | unknown;
+    is_hide?: boolean | undefined;
+    slot?: number | undefined;
+  }
 }
 
 interface Forms {

@@ -1,7 +1,7 @@
 /// <reference types="vite/client" />
 
 type childrenComponent = {
-  children: JSX.Element[] | JSX.Element;
+  children?: JSX.Element[] | JSX.Element;
 };
 
 type PokemonResult = {

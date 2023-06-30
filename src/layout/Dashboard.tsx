@@ -1,4 +1,5 @@
 import { useState, useEffect, ChangeEvent } from "react";
+import { getPokemon, getPokemonDetails } from "../api/PokeApi";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
@@ -6,26 +7,22 @@ import Typography from "@mui/material/Typography";
 import { CardActionArea } from "@mui/material";
 import Pokemon from "../interface/Pokemon";
 import { PokeBallLoader } from "../components/loader/PokeBallLoader";
+import { Pagination } from "../components/pagination/Pagination";
+import { createPortal } from "react-dom";
+import { PokeInfo } from "../components/pokemoncard/PokeInfo";
 
 const Dashboard = () => {
   const [pokemon, setPokemon] = useState<Array<Pokemon>>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [searchPokemon, setSearchPokemon] = useState<string>("");
   const [currentPage, setCurrentPage] = useState<number>(0);
-
-  const getPokemon = async () => {
-    const getData = await fetch(
-      `https://pokeapi.co/api/v2/pokemon?limit=100&offset=0`
-    );
-    const response = await getData.json();
-    return response;
-  };
-
-  const getPokemonDetails = async (pokeDetail: string) => {
-    const response = await fetch(`${pokeDetail}`);
-    const data = await response.json();
-    return data;
-  };
+  const [showPokemonCard, setShowPokemonCard] = useState<boolean>(false);
+  const [pokedex, setPokedex] = useState({
+    name: "",
+    sprites: "",
+    weight: "",
+    abilities: "",
+  });
 
   useEffect(() => {
     try {
@@ -81,7 +78,7 @@ const Dashboard = () => {
       <div>
         <div className="flex w-full flex-col justify-center p-12">
           <div className="flex flex-col items-center gap-y-24">
-            <div className="search-pokemon">
+            <div>
               <input
                 type="text"
                 name=""
@@ -95,12 +92,26 @@ const Dashboard = () => {
             {loading ? (
               <PokeBallLoader />
             ) : (
-              <div className="grid grid-cols-5 grid-rows-2 gap-3">
+              <div className="grid grid-cols-5 grid-rows-2 gap-3 max-md:grid-cols-3 max-sm:grid-cols-2">
                 {pokemon
                   .map(
                     (pokeItem: Pokemon, index): JSX.Element => (
                       <>
-                        <Card key={index} sx={{ maxWidth: 345 }}>
+                        <Card
+                          key={index}
+                          sx={{ maxWidth: 345 }}
+                          onClick={() => {
+                            setPokedex({
+                              name: `${pokeItem.name}`,
+                              sprites: `${pokeItem.sprites?.front_default}`,
+                              weight: `${pokeItem.weight}`,
+                              abilities: `${pokeItem.abilities?.map(
+                                (ability) => ability.ability.name
+                              )}`,
+                            });
+                            setShowPokemonCard(true);
+                          }}
+                        >
                           <CardActionArea>
                             <CardMedia
                               component="img"
@@ -117,7 +128,7 @@ const Dashboard = () => {
                             >
                               {pokeItem.name}
                             </Typography>
-                            <div className="mx-9 rounded-3xl bg-lime-500 p-1.5 text-center">
+                            <div className="mx-2 rounded-3xl bg-lime-500 p-1.5 text-center max-lg:text-sm max-lg:mx-1">
                               <span className="font-semibold text-white">
                                 {pokeItem.types?.map((pokemonType) =>
                                   pokemonType.type.name.toUpperCase()
@@ -131,9 +142,9 @@ const Dashboard = () => {
                                     <Typography
                                       key={index}
                                       variant="body2"
-                                      className="text-slate-500"
+                                      className="text-slate-500 max-lg:text-sm"
                                     >
-                                      <span className="text-gray-900">
+                                      <span className="text-gray-900 max-lg:text-xs">
                                         Moves:
                                       </span>{" "}
                                       {poke.move.name}
@@ -151,68 +162,21 @@ const Dashboard = () => {
                   .slice(currentPage, currentPage + 10)}
               </div>
             )}
+            {showPokemonCard &&
+              createPortal(
+                <PokeInfo
+                  sprites={pokedex.sprites}
+                  weight={pokedex.weight}
+                  name={pokedex.name}
+                  abilities={pokedex.abilities}
+                  onClose={() => {
+                    setShowPokemonCard(false);
+                  }}
+                />,
+                document.body
+              )}
           </div>
-          <div className="mt-5 flex items-center justify-between border-t border-gray-200 bg-white px-4 py-3 sm:px-6"></div>
-          <div className="flex flex-1 justify-between sm:hidden">
-            <a
-              className="relative inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
-              onClick={previousPage}
-            >
-              Previous
-            </a>
-            <a
-              className="relative ml-3 inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
-              onClick={nextPage}
-            >
-              Next
-            </a>
-          </div>
-          <div className="hidden sm:flex sm:flex-1 sm:items-center sm:justify-center">
-            <div>
-              <nav
-                className="isolate inline-flex -space-x-px rounded-md shadow-sm"
-                aria-label="Pagination"
-              >
-                <a
-                  className="relative inline-flex cursor-pointer items-center rounded-l-md p-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-[#088BED] hover:text-white focus:z-20 focus:outline-offset-0"
-                  onClick={previousPage}
-                >
-                  <svg
-                    className="h-5 w-5"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                    aria-hidden="true"
-                  >
-                    <path
-                      fill-rule="evenodd"
-                      d="M12.79 5.23a.75.75 0 01-.02 1.06L8.832 10l3.938 3.71a.75.75 0 11-1.04 1.08l-4.5-4.25a.75.75 0 010-1.08l4.5-4.25a.75.75 0 011.06.02z"
-                      clip-rule="evenodd"
-                    />
-                  </svg>
-                  <span className="">Previous</span>
-                </a>
-                &nbsp;&nbsp;
-                <a
-                  className="relative inline-flex cursor-pointer items-center rounded-r-md p-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-[#088BED] hover:text-white focus:z-20 focus:outline-offset-0"
-                  onClick={nextPage}
-                >
-                  <span className="">Next</span>
-                  <svg
-                    className="h-5 w-5"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                    aria-hidden="true"
-                  >
-                    <path
-                      fill-rule="evenodd"
-                      d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z"
-                      clip-rule="evenodd"
-                    />
-                  </svg>
-                </a>
-              </nav>
-            </div>
-          </div>
+          <Pagination previousPage={previousPage} nextPage={nextPage} />
         </div>
       </div>
     </>
